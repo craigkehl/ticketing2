@@ -22,12 +22,12 @@ const userSchema = new mongoose.Schema(
   {
     email: {
       type: String,
-      required: true,
+      required: true
     },
     password: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
   {
     toJSON: {
@@ -36,21 +36,20 @@ const userSchema = new mongoose.Schema(
         delete ret._id;
         delete ret.password;
         delete ret.__v;
-      },
-    },
+      }
+    }
   }
 );
 
 userSchema.pre('save', async function (done) {
   if (this.isModified('password')) {
     const hashed = await Password.toHash(this.get('password'));
-    await this.set('password', hashed);
+    this.set('password', hashed);
   }
   done();
 });
 
 userSchema.statics.build = (attrs: UserAttrs) => {
-  attrs.password = Password.toHash(attrs.password).toString();
   return new User(attrs);
 };
 
