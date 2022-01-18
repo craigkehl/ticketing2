@@ -1,0 +1,6 @@
+{
+  "yaml.schemas": {
+    "file:///Users/craigkehl/.vscode/extensions/atlassian.atlascode-2.10.3/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml",
+    "kubernetes://schema/apps/v1%40deployment": "file:///Users/craigkehl/Documents/development/Repo/udemy/microservices/ticketing2/infra/k8s/auth-depl.yaml"
+  }
+}
