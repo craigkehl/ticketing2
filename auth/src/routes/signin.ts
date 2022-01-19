@@ -2,17 +2,19 @@ import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import jwt from 'jsonwebtoken';
 
-import { Password } from "../services/password";
-import { User } from "../models/user";
-import { validateRequest } from "../middleware/validate-request";
-import { BadRequestError } from "../errors/bad-request-error";
+import { Password } from '../services/password';
+import { User } from '../models/user';
+import { validateRequest } from '../middleware/validate-request';
+import { BadRequestError } from '../errors/bad-request-error';
 
 const router = express.Router();
 
 router.post(
   '/api/users/signin',
   [
-    body('email').isEmail().withMessage('Email must be valid'),
+    body('email')
+      .isEmail()
+      .withMessage('Email must be valid'),
     body('password')
       .trim()
       .notEmpty()
@@ -27,8 +29,11 @@ router.post(
       throw new BadRequestError('Email or password is incorrect');
     }
 
-    const pwMatch = await Password.compare(existingUser.password, password);
-    if (!pwMatch) {
+    const passwordsMatch = await Password.compare(
+      existingUser.password,
+      password
+    );
+    if (!passwordsMatch) {
       throw new BadRequestError('Password is incorrect');
     }
 
@@ -46,6 +51,7 @@ router.post(
     };
 
     res.status(200).send(existingUser);
-  });
+  }
+);
 
 export { router as signinRouter };
