@@ -27,8 +27,6 @@ it('returns a 400 on bad email or password entry', async () => {
       password: '12asdfasdfasdf3'
     })
     .expect(400);
-
-  expect(response.get('Set-Cookie')).toBeDefined() === null;
 });
 
 it('returns a 200 on successful signin', async () => {
