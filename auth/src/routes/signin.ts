@@ -4,9 +4,8 @@ import jwt from 'jsonwebtoken';
 
 import { Password } from "../services/password";
 import { User } from "../models/user";
-import { validateRequest } from "../middleware/validate-requests";
+import { validateRequest } from "../middleware/validate-request";
 import { BadRequestError } from "../errors/bad-request-error";
-import { isDebuggerStatement } from "typescript";
 
 const router = express.Router();
 
@@ -28,7 +27,7 @@ router.post(
       throw new BadRequestError('Email or password is incorrect');
     }
 
-    const pwMatch = Password.compare(existingUser.password, password);
+    const pwMatch = await Password.compare(existingUser.password, password);
     if (!pwMatch) {
       throw new BadRequestError('Password is incorrect');
     }
@@ -36,14 +35,14 @@ router.post(
     const userJwt = jwt.sign(
       {
         id: existingUser.id,
-        email: existingUser.email,
+        email: existingUser.email
       },
       process.env.JWT_KEY!
     );
 
     // Store it on session object
     req.session = {
-      jwt: userJwt,
+      jwt: userJwt
     };
 
     res.status(200).send(existingUser);
